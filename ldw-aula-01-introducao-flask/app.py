@@ -7,7 +7,7 @@ app = Flask(__name__, template_folder='views') # __name__ representa o nome da a
 
 # Definindo a rota principal da aplicação '/'
 @app.route('/')
-def home(): # Função que será executada ao acessar a rota
+def home(): # Função que será executada ao acessar a rota, view function
     return render_template('index.html')
 
 
