@@ -1,0 +1,10 @@
+    {% extends 'base.html' %}
+
+    {% block content %}
+    <h2>Bem vindo a WikiBanda!</h2>
+    <hr>
+
+    <a href="/games"><p>Página de bandas</p></a>
+    <a href="{{url_for('newgame')}}"><p>Cadastrar bandas</p></a>
+
+    {% endblock content %}
