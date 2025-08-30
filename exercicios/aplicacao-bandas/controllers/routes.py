@@ -39,7 +39,6 @@ def init_app(app):
     @app.route('/newbanda', methods=['GET','POST'])
     def newbanda():
         
-        # Tratando a requisição POST
         if request.method == 'POST':
             
             if request.form.get('band') and request.form.get('genre') and request.form.get('yearCreation') and request.form.get('musics') and request.form.get('members'):
