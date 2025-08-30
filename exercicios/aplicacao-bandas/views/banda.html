@@ -1,33 +1,54 @@
-    {% extends 'base.html'%}
+{% extends 'base.html'%}
 
-    {% block content %}
-    <h1>Essa é a página de bandas!</h1>
-    <h3>Bandas mais populares: </h3>
-    <ul>
-        <li>Nome: <strong>{{name}}</strong></li>
-        <li>Gênero: <strong>{{gender}}</strong></li>
-        <li>Ano de criação: <strong>{{yearcreation}}</strong></li>
-        <li>Membros: <strong>{{members}}</strong></li>
+{% block content %}
+<div class="conteudo__bandas">
+  <h1 class="bandas__titulo">Essa é a página de bandas!</h1>
+  <hr>
+  <h3 class="bandas__subtitulo">Banda em destaque:</h3>
+
+  <div class="bandas__informacoes">
+    <ul class="lista__bandas">
+      <li><span>Banda:</span> {{ band }}</li>
+      <li><span>Gênero:</span> {{ genre }}</li>
+      <li><span>Ano de criação:</span> {{ yearCreation }}</li>
+      <li><span>Músicas:</span>
+        <ul class="lista__itens">
+          {% for music in musics %}
+            <li>{{ music }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li><span>Membros:</span>
+        <ul class="lista__itens">
+          {% for member in members %}
+            <li>{{ member['Nome'] }} - {{ member['Função'] }}</li>
+          {% endfor %}
+        </ul>
+      </li>
     </ul>
-    <h3>Está sendo jogado por:</h3>
-    <ol>
-        {%for player in players%}
-            <li>{{player}}</li>
-        {% endfor %}
-    </ol>
-    <hr>
-    <form action="{{url_for('games')}}" method="POST"> 
-        <label for="player">Jogador:</label>
-        <input type="text" name="player" class="form-control w-50">
-        <input type="submit" value="Entrar" class="btn btn-success">
-    </form>
-    <hr>
+  </div>
+</div>
 
-    <h4>Console mais bem avaliado:</h4>
-    {% for key, value in console.items() %}
-    <details>
-        <summary>{{key}}</summary>
-        <p>{{value}}</p>
-    </details>
-    {% endfor %}
-    {% endblock content %}
+<hr>
+<section class="recomendacoes">
+    <h3>Músicas recomendadas pelos usuários:</h3>
+
+    <div class="recomendacoes-lista">
+        {% for recomendation in recomendations %}
+        <div class="recomendacao-card">
+            {{ recomendation }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <form action="{{ url_for('bandas') }}" method="POST" class="recomendacoes-form"> 
+        <label for="recomendation">Insira uma música e banda:</label>
+        <input type="text" name="recomendation" id="recomendation" placeholder="Ex: Smells Like Teen Spirit - Nirvana">
+        <button type="submit">Recomendar</button>
+    </form>
+</section>
+<hr>
+
+<a href="{{ url_for('home') }}" class="botao__voltar">Voltar para o início</a>
+
+{% endblock %}

@@ -2,8 +2,9 @@ from flask import render_template, request, redirect, url_for
 
 def init_app(app):
     
-    musics = ['Be Quiet And Drive (Far Away)', 'My Own Summer (Shove It)', 'Change (In the house of flies)', 'Sextape']
-    gamelist = [{'Título': 'Need For Speed Most Wanted', 'Ano': '2005', 'Categoria': 'Corrida'}]
+    musics = ['Be Quiet And Drive (Far Away)', 'My Own Summer (Shove It)', 'Change (In the house of flies)', 'Sextape', 'my mind is a mountain', 'i think about you all the time', 'Bloody Cape', 'Rats!Rats!Rats!']
+    bandlist = [{'Banda': 'Deftones', 'Gênero': 'Metal Alternativo/Shoegaze', 'Criação': '1988', 'Música': 'Be Quiet And Drive (Far Away)', 'Membros': 'Chino Moreno, Stephen Carpenter, Abe Cunnigham, Frank Delgado, Fred Sablan'}]
+    recomendations = ['Circle with me - Spiritbox', '5 Minutes Alone - Pantera', 'N.I.B - Black Sabbath', 'Gematria (The Killing Name) - Slipknot', 'Silvera - Gojira', 'Shadow Moses - Bring Me The Horizon', 'Them Bones - Alice In Chains', 'Emergence - Sleep Token','Clown - Korn', 'Given Up - Linkin Park', 'Lost In Translation - Sol Invicto']
         
     @app.route('/')
     def home():
@@ -12,7 +13,7 @@ def init_app(app):
     @app.route('/bandas', methods=['GET','POST'])
     def bandas():
         band = 'Deftones'
-        gender = 'Metal Alternativo/Shoegaze'
+        genre = 'Metal Alternativo/Shoegaze'
         yearCreation = '1988'
         members = [{'Nome' : 'Chino Moreno',
                 'Função': 'Vocalista/Guitarrista'}, 
@@ -22,19 +23,18 @@ def init_app(app):
         {'Nome': 'Fred Sablan', 'Função':'Baixista'}]
         
         
-        # Tratando uma requisição POST com Request
         if request.method == 'POST':
-            # Coletando o texto da input
-            if request.form.get('music'):
-                musics.append(request.form.get('music'))
+            if request.form.get('recomendation'):
+                recomendations.append(request.form.get('recomendation'))
                 return redirect(url_for('bandas'))
         
         return render_template('banda.html', 
                             band=band,
-                            gender=gender,
+                            genre=genre,
                             yearCreation=yearCreation,
                             musics=musics,
-                            members=members)
+                            members=members,
+                            recomendations=recomendations)
 
     @app.route('/newbanda', methods=['GET','POST'])
     def newbanda():
@@ -42,8 +42,8 @@ def init_app(app):
         # Tratando a requisição POST
         if request.method == 'POST':
             
-            if request.form.get('title') and request.form.get('year') and request.form.get('category'):
-                gamelist.append({'Titulo': request.form.get('title'), 'Ano' : request.form.get('year'), 'Categoria': request.form.get('category')})
-                return redirect(url_for('newgame'))
+            if request.form.get('band') and request.form.get('genre') and request.form.get('yearCreation') and request.form.get('musics') and request.form.get('members'):
+                bandlist.append({'Banda': request.form.get('band'), 'Gênero' : request.form.get('genre'), 'Criação': request.form.get('yearCreation'), 'Música': request.form.get('musics'), 'Membros': request.form.get('members')})
+                return redirect(url_for('newbanda'))
                 
-        return render_template('newGame.html', gamelist=gamelist)
+        return render_template('newBanda.html', bandlist=bandlist)

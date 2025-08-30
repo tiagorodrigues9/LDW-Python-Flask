@@ -1,10 +1,14 @@
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 
-    {% block content %}
-    <h2>Bem vindo a WikiBanda!</h2>
-    <hr>
+{% block content %}
+<div class="conteudo__principal">
+  <h2 class="apresentacao__titulo">Bem-vindo à WikiBanda!</h2>
+  <hr class="linha">
+  <p class="apresentacao__subtitulo">Aqui você encontra informações sobre bandas e pode cadastrar novas.</p>
 
-    <a href="/games"><p>Página de bandas</p></a>
-    <a href="{{url_for('newgame')}}"><p>Cadastrar bandas</p></a>
-
-    {% endblock content %}
+  <div class="menu">
+    <a href="/bandas" class="menu__item">Página de Bandas</a>
+    <a href="{{ url_for('newbanda') }}" class="menu__item">Cadastrar Bandas</a>
+  </div>
+</div>
+{% endblock %}
