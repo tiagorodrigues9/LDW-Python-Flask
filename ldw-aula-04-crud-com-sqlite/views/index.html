@@ -1,0 +1,10 @@
+    {% extends 'base.html' %}
+
+    {% block content %}
+    <h2>Esta é a homepage!</h2>
+    <hr>
+
+    <a href="/games"><p>Página de jogos</p></a>
+    <a href="{{url_for('newgame')}}"><p>Cadastrar jogos</p></a>
+
+    {% endblock content %}
