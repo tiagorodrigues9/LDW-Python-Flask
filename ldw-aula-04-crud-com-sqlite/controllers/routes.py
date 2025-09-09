@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 import urllib # Envia requisições a uma URL
 import json # Faz a conversão dos dados 
+from models.database import Game, db
 
 def init_app(app):
     
@@ -71,3 +72,43 @@ def init_app(app):
                 return f'Game com a ID {id} não foi encontrado.'
         else:       
             return render_template ('apigames.html', gamelist=gamelist)
+    
+    # CRUD - Listagem e Cadastro
+    @app.route('/estoque', methods=['GET','POST'])
+    @app.route('/estoque/delete/<int:id>')
+    def estoque(id=None):
+        # Se o ID for enviado
+        if id:
+            # Selecionando o jogo pelo ID
+            game = Game.query.get(id)
+            #Deleta o jogo pelo ID
+            db.session.delete(game)
+            db.session.commit()
+            return redirect(url_for('estoque'))
+        
+        if request.method == 'POST':
+            #  Realiza o cadastro do jogo
+            newGame = Game(request.form['title'],request.form['year'], request.form['category'], request.form['platform'], request.form['price'], request.form['quantity'])
+            db.session.add(newGame) #.session.add é o método do SQLAlchemy para gravar registros no banco
+            db.session.commit() #.session.commit confirma as alterações no banco
+            return redirect(url_for('estoque'))
+            
+            
+        gamesEstoque = Game.query.all() # query.all é o método do SQL Alchemy para selecionar todos os registros
+        return render_template('estoque.html', gamesEstoque=gamesEstoque)
+    
+    # CRUD - Rota de edição
+    @app.route('/edit/<int:id>', methods=['GET', 'POST'])
+    def edit (id):
+        game = Game.query.get(id)
+        
+        if request.method == 'POST':
+            game.title = request.form['title']
+            game.year = request.form['year']
+            game.category = request.form['category']
+            game.platform = request.form['platform']
+            game.price = request.form['price']
+            game.quantity = request.form['quantity']
+            db.session.commit()
+            return redirect(url_for('estoque'))
+        return render_template('editgame.html', game=game)
