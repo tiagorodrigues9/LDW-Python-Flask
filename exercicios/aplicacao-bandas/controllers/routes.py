@@ -65,11 +65,11 @@ def init_app(app):
         nonlocal SPOTIFY_ACCESS_TOKEN, SPOTIFY_TOKEN_EXPIRY
         
         auth_url = 'https://accounts.spotify.com/api/token'
-        auth_data = {
-            'grant_type': 'client_credentials',
-            'client_id': 'e0578467850d4d39adeee53dee3e9733', # A chave da API
-            'client_secret': 'eb430c583092414789506f04c802927b', # O segredo da API
-        }
+        # auth_data = {
+        #     'grant_type': 'client_credentials',
+        #     'client_id': 'e0578467850d4d39adeee53dee3e9733', # A chave da API
+        #     'client_secret': 'eb430c583092414789506f04c802927b', # O segredo da API
+        # } Precisa descomentar essa linha para funcionar
         
         try: # Faz a requisição para obter o token
             auth_response = requests.post(auth_url, data=auth_data) # Envia uma solicitação POST para o servidor do Spotify. O Spotify responde com informações que ficam armazenadas em auth_response
