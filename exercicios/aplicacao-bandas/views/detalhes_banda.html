@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="conteudo__principal">
+    <a href="{{ url_for('catalogo') }}" class="botao__voltar">← Voltar para o catálogo</a>
+    
+    <div class="detalhes__banda">
+        <!-- CARD GRANDE PRINCIPAL -->
+        <div class="detalhes__banda__card__principal">
+            <!-- HEADER DO CARD -->
+            <div class="detalhes__banda__card__principal__info">
+                <img src="{{ banda.image_url or 'https://via.placeholder.com/400x250/333/fff?text=Imagem+não+encontrada' }}" 
+                     alt="{{ banda.nome }}" class="detalhes__banda__card__principal__imagem">
+                
+                <div class="detalhes__banda__card__principal__descricao">
+                    <h1 class="apresentacao__titulo">{{ banda.nome }}</h1>
+                    <p class="apresentacao__subtitulo">{{ banda.genero }}</p>
+                    
+                    <a href="{{ banda.spotify_url or 'https://open.spotify.com' }}" 
+                       target="_blank" 
+                       class="menu__item">
+                        🎵 Ouvir no Spotify
+                    </a>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO DO CARD -->
+            <div class="detalhes__banda__card">
+                <!-- LINHA 1: Ano + Música -->
+                <div class="detalhes__banda__card__descricao">
+                    <div class="detalhes__banda__card__musica">
+                        <h2 class="bandas__subtitulo">📅 Ano de Criação</h2>
+                        <p>{{ banda.criacao or 'Não informado' }}</p>
+                    </div>
+                    
+                    <div class="detalhes__banda__card__musica">
+                        <h2 class="bandas__subtitulo">🎵 Música Popular</h2>
+                        <p>{{ banda.popular_track or 'Nenhuma música encontrada' }}</p>
+                    </div>
+                </div>
+
+                <!-- LINHA 2: Membros -->
+                <div class="detalhes__banda__card__descricao">
+                    <div class="detalhes__banda__card__musica full-width">
+                        <h2 class="bandas__subtitulo">👥 Membros</h2>
+                        <p>{{ banda.membros or 'Membros não encontrados' }}</p>
+                    </div>
+                </div>
+
+                <!-- LINHA 3: Descrição -->
+                <div class="detalhes__banda__card__descricao">
+                    <div class="detalhes__banda__card__musica full-width">
+                        <h2 class="bandas__subtitulo">📝 Descrição</h2>
+                        <p>{{ banda.descricao or 'Descrição não disponível.' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+<a href="{{ url_for('home') }}" class="botao__voltar">Voltar para o início</a>
+
+{% endblock content %}

@@ -1,0 +1,26 @@
+    {% extends 'base.html' %}
+
+    {% block content %}
+
+    <div class="conteudo__principal">
+        <h1 class="apresentacao__titulo">Catálogo de Bandas</h1>
+        <div class="linha"></div>
+        <p class="apresentacao__subtitulo">Descubra as melhores bandas de metal</p>
+    </div>
+
+    <div class="catalogo__banda">
+        {% for banda in bandas %}
+        <div class="catalogo__banda__card">
+            <img src="{{ banda.image_url or 'https://via.placeholder.com/250x150/333/fff?text=Imagem+não+encontrada' }}" 
+                alt="{{ banda.nome }}" class="band-image">
+            <h3>{{ banda.nome }}</h3>
+            <p>{{ banda.genero }}</p>
+            <a href="{{ url_for('detalhes_banda', band_name=banda.nome) }}" class="menu__item">+ info</a>
+        </div>
+          {% endfor %}
+    </div>
+
+    <hr>
+    <a href="{{ url_for('home') }}" class="botao__voltar">Voltar para o início</a>
+
+    {% endblock content %}
