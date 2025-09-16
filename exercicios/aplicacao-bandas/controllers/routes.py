@@ -69,7 +69,7 @@ def init_app(app):
         #     'grant_type': 'client_credentials',
         #     'client_id': 'e0578467850d4d39adeee53dee3e9733', # A chave da API
         #     'client_secret': 'eb430c583092414789506f04c802927b', # O segredo da API
-        # } Precisa descomentar essa linha para funcionar
+        # }
         
         try: # Faz a requisição para obter o token
             auth_response = requests.post(auth_url, data=auth_data) # Envia uma solicitação POST para o servidor do Spotify. O Spotify responde com informações que ficam armazenadas em auth_response
@@ -372,9 +372,6 @@ def init_app(app):
 
     @app.route('/detalhes/<band_name>', methods=['GET','POST'])
     def detalhes_banda(band_name):
-        """Página de detalhes também com cache"""
-        # Para detalhes, podemos usar um cache separado ou buscar sempre
-        # Vou fazer uma versão simples que busca sempre
         banda_data = fetch_band_data(band_name)
         
         if not banda_data:

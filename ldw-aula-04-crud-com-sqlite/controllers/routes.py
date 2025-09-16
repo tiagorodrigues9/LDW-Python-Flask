@@ -92,10 +92,15 @@ def init_app(app):
             db.session.add(newGame) #.session.add é o método do SQLAlchemy para gravar registros no banco
             db.session.commit() #.session.commit confirma as alterações no banco
             return redirect(url_for('estoque'))
+        else:    
+            # Paginação de registros
+            # Captura o valor de 'page' que foi passado pelo método GET
+            page = request.args.get('page',1, type=int)
             
-            
-        gamesEstoque = Game.query.all() # query.all é o método do SQL Alchemy para selecionar todos os registros
-        return render_template('estoque.html', gamesEstoque=gamesEstoque)
+            # Valor definido par registros em cada página
+            per_page = 3
+            gamesEstoque = Game.query.paginate(page=page, per_page=per_page) # query.all é o método do SQL Alchemy para selecionar todos os registros / query.paginate é o método para filtrar os registros de acordo com um limite
+            return render_template('estoque.html', gamesEstoque=gamesEstoque)
     
     # CRUD - Rota de edição
     @app.route('/edit/<int:id>', methods=['GET', 'POST'])
