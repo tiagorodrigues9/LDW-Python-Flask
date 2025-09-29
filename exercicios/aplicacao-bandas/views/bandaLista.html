@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="conteudo__cadastro">
+    <h2 class="apresentacao__titulo">Lista de Bandas</h2>
+
+    <!-- Formulário de cadastro -->
+    <details>
+        <summary class="botao__cadastro">[ Cadastrar nova banda ]</summary>
+        <div class="card formulario" style="margin-top: 20px;">
+            <form action="{{ url_for('bandaLista') }}" method="POST">
+                <div class="formulario__item">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Nome" required>
+                </div>
+
+                <div class="formulario__item">
+                    <label for="genero">Gênero</label>
+                    <input type="text" id="genero" name="genero" placeholder="Gênero" required>
+                </div>
+
+                <div class="formulario__item">
+                    <label for="ano_criacao">Ano de Criação</label>
+                    <input type="number" id="ano_criacao" name="ano_criacao" placeholder="Ano de Criação">
+                </div>
+
+                <button type="submit" class="botao__cadastro">Cadastrar</button>
+                <input type="reset" value="Limpar" class="botao__cadastro" style="background: #a33a3a;">
+            </form>
+        </div>
+    </details>
+
+    <!-- Tabela de bandas -->
+    <div class="detalhes__banda" style="margin-top: 50px;">
+        <h5 class="apresentacao__subtitulo">Bandas Cadastradas</h5>
+        <table class="tabela__banda">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>Gênero</th>
+                    <th>Ano de Criação</th>
+                    <th colspan="2">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for banda in bandalista.items %}
+                <tr>
+                    <td><img src="{{ url_for('static', filename='imgs/musicicon.png') }}" alt="Banda" width="40"></td>
+                    <td>{{ banda.nome }}</td>
+                    <td>{{ banda.genero }}</td>
+                    <td>{{ banda.ano_criacao }}</td>
+                    <td>
+                        <a class="botao__cadastro" href="{{ url_for('bandasEdit', id=banda.id) }}" style="background: #e0a800;">Editar</a>
+                    </td>
+                    <td>
+                        <a class="botao__cadastro" href="{{ url_for('bandaLista', id=banda.id) }}" onclick="return confirm('Deseja mesmo excluir a banda {{ banda.nome }}?')" style="background: #a33a3a;">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginação -->
+        <p style="text-align: center; margin-top: 20px;">
+            {% if bandalista.has_prev %}
+                <a class="botao__voltar" href="{{ url_for('bandas', page=bandalista.prev_num) }}"><< Anterior</a>
+            {% endif %}
+
+            {% if bandalista.has_next %}
+                <a class="botao__voltar" href="{{ url_for('bandas', page=bandalista.next_num) }}">Próximo >></a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+ <hr>
+    <a href="{{ url_for('home') }}" class="botao__voltar">Voltar para o início</a>
+
+{% endblock content %}

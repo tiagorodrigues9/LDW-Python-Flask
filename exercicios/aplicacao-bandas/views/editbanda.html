@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="conteudo__cadastro">
+    <h2 class="apresentacao__titulo">Editar Banda</h2>
+
+    <div class="card formulario" style="max-width: 500px; margin: 30px auto;">
+        <form action="{{ url_for('bandasEdit', id=banda.id) }}" method="POST">
+            <div class="formulario__item">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" class="form-control" value="{{ banda.nome }}" required>
+            </div>
+
+            <div class="formulario__item">
+                <label for="genero">Gênero</label>
+                <input type="text" id="genero" name="genero" class="form-control" value="{{ banda.genero }}" required>
+            </div>
+
+            <div class="formulario__item">
+                <label for="ano_criacao">Ano de Criação</label>
+                <input type="number" id="ano_criacao" name="ano_criacao" class="form-control" value="{{ banda.ano_criacao }}" required>
+            </div>
+
+            <div style="display:flex; justify-content: space-between; margin-top: 20px;">
+                <button type="submit" class="botao__cadastro" style="background:#e0a800;">Alterar</button>
+                <a href="{{ url_for('bandas') }}" class="botao__voltar" style="text-decoration:none; text-align:center;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

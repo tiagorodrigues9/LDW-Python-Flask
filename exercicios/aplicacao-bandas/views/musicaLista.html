@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="conteudo__cadastro">
+    <h2 class="apresentacao__titulo">Lista de Músicas</h2>
+
+    <!-- Formulário de cadastro -->
+    <details>
+        <summary class="botao__cadastro">[ Cadastrar nova música ]</summary>
+        <div class="card formulario" style="margin-top: 20px;">
+            <form action="{{ url_for('musicaLista') }}" method="POST">
+                <div class="formulario__item">
+                    <label for="titulo">Título</label>
+                    <input type="text" id="titulo" name="titulo" placeholder="Título" required>
+                </div>
+
+                <div class="formulario__item">
+                    <label for="ano_lancamento">Ano de Lançamento</label>
+                    <input type="number" id="ano_lancamento" name="ano_lancamento" placeholder="Ano de Lançamento" required>
+                </div>
+
+                <div class="formulario__item">
+                    <label for="album">Álbum</label>
+                    <input type="text" id="album" name="album" placeholder="Álbum" required>
+                </div>
+
+                <div class="formulario__item">
+                    <label for="tempo">Tempo (minutos)</label>
+                    <input type="number" id="tempo" name="tempo" placeholder="Tempo" min="0" step="0.01" required>
+                </div>
+
+                <div class="formulario__item">
+                    <label for="banda">Banda</label>
+                    <select name="banda" id="banda" required>
+                        <option value="" selected disabled>Selecione a banda</option>
+                        {% for banda in bandas %}
+                            <option value="{{ banda.id }}">{{ banda.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="botao__cadastro">Cadastrar</button>
+                <input type="reset" value="Limpar" class="botao__cadastro" style="background: #a33a3a;">
+            </form>
+        </div>
+    </details>
+
+    <!-- Tabela de músicas -->
+    <div class="detalhes__banda" style="margin-top: 50px;">
+        <h5 class="apresentacao__subtitulo">Músicas Registradas</h5>
+        <table class="tabela__banda">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Título</th>
+                    <th>Ano de Lançamento</th>
+                    <th>Álbum</th>
+                    <th>Banda</th>
+                    <th>Tempo</th>
+                    <th colspan="2">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in musicalista.items %}
+                <tr>
+                    <td><img src="{{ url_for('static', filename='imgs/musicicon.png') }}" alt="Música" width="40"></td>
+                    <td>{{ m.titulo }}</td>
+                    <td>{{ m.ano_lancamento }}</td>
+                    <td>{{ m.album }}</td>
+                    <td>{{ m.banda.nome }}</td>
+                    <td>{{ m.tempo }}</td>
+                    <td>
+                        <a class="botao__cadastro" href="{{ url_for('musicEdit', id=m.id) }}" style="background: #e0a800;">Editar</a>
+                    </td>
+                    <td>
+                        <a class="botao__cadastro" href="{{ url_for('musicaLista', id=m.id) }}" onclick="return confirm('Deseja mesmo excluir a música {{ m.titulo }}?')" style="background: #a33a3a;">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginação -->
+        <p style="text-align: center; margin-top: 20px;">
+            {% if musicalista.has_prev %}
+                <a class="botao__voltar" href="{{ url_for('musicaLista', page=musicalista.prev_num) }}"><< Anterior</a>
+            {% endif %}
+
+            {% if musicalista.has_next %}
+                <a class="botao__voltar" href="{{ url_for('musicaLista', page=musicalista.next_num) }}">Próximo >></a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+ <hr>
+    <a href="{{ url_for('home') }}" class="botao__voltar">Voltar para o início</a>
+    
+{% endblock content %}

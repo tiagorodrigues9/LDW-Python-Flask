@@ -6,6 +6,7 @@ import os  # Para operações com arquivos e pastas
 from datetime import datetime, timedelta # Para datas e horários
 from concurrent.futures import ThreadPoolExecutor, as_completed # Para processamento paralelo de coleta de informações na API
 from functools import lru_cache # Para cache de funções
+from models.database import db, Musica, Banda
 
 def init_app(app):
     
@@ -378,3 +379,70 @@ def init_app(app):
             return "Banda não encontrada", 404
         
         return render_template('detalhes_banda.html', banda=banda_data)
+    
+    @app.route('/musicas/lista', methods=['GET', 'POST'])
+    @app.route('/musicas/lista/delete/<int:id>')
+    def musicaLista(id=None):
+        if id:
+            musica = Musica.query.get(id)
+            db.session.delete(musica)
+            db.session.commit()
+            return redirect(url_for('musicaLista'))
+        if request.method == 'POST':
+            newmusic = Musica(request.form['titulo'], request.form['ano_lancamento'], request.form['album'],
+                           request.form['tempo'],  request.form['banda'])
+            db.session.add(newmusic)
+            db.session.commit()
+            return redirect(url_for('musicaLista'))
+        else:
+            page = request.args.get('page', 1, type=int)
+            per_page = 3
+            musicas_page = Musica.query.paginate(page=page, per_page=per_page)
+            bandas = Banda.query.all()
+            return render_template('musicaLista.html', musicalista=musicas_page, bandas=bandas)
+
+    @app.route('/musicas/edit/<int:id>', methods=['GET', 'POST'])
+    def musicEdit(id):
+        m = Musica.query.get(id)
+        if request.method == 'POST':
+            m.titulo = request.form['titulo']
+            m.ano_lancamento = request.form['ano_lancamento']
+            m.album = request.form['album']
+            m.tempo = request.form['tempo']
+            m.banda_id = request.form['banda']
+            db.session.commit()
+            return redirect(url_for('musicaLista'))
+        bandas = Banda.query.all()
+        return render_template('editmusic.html', m=m, bandas=bandas)
+
+    @app.route('/bandas/lista', methods=['GET', 'POST'], endpoint='bandaLista')
+    @app.route('/bandas/lista/delete/<int:id>', endpoint='bandaLista')
+    def banda(id=None):
+        if id:
+            banda = Banda.query.get(id)
+            db.session.delete(banda)
+            db.session.commit()
+            return redirect(url_for('bandaLista'))
+        if request.method == 'POST':
+            newbanda = Banda(
+                request.form['nome'], request.form['genero'], request.form['ano_criacao'])
+            db.session.add(newbanda)
+            db.session.commit()
+            return redirect(url_for('bandaLista'))
+        else:
+            page = request.args.get('page', 1, type=int)
+            per_page = 3
+            bandas_page = Banda.query.paginate(
+                page=page, per_page=per_page)
+            return render_template('bandaLista.html', bandalista=bandas_page)
+
+    @app.route('/bandas/edit/<int:id>', methods=['GET', 'POST'])
+    def bandasEdit(id):
+        banda = Banda.query.get(id)
+        if request.method == 'POST':
+            banda.nome = request.form['nome']
+            banda.genero = request.form['genero']
+            banda.ano_criacao = request.form['ano_criacao']
+            db.session.commit()
+            return redirect(url_for('bandaLista'))
+        return render_template('editbanda.html', banda=banda)
